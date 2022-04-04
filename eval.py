@@ -10,7 +10,7 @@ import unet_model as UNET
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
-from helper import load_obj, ADD_score, save_obj
+from helper import load_obj, ADD_score, save_obj, create_bounding_box
 from torchvision import transforms, utils
 from create_ground_truth import get_rot_tra
 from scipy.spatial.transform import Rotation as R
@@ -211,6 +211,12 @@ for i in range(len(testing_images_idx)):
         score = ADD_score(pt_cld, true_pose, pred_pose, diameter)
         total_score += score
         score_card[label] += score
+
+        fileName = "Poses/" + label + idx
+
+        poseImage = create_bounding_box(img, true_pose, pt_cld, intrinsic_matrix,color=(0,0,255))
+
+        cv2.imwrite(fileName, poseImage)
 
     else:
         score_card[label] += 0
